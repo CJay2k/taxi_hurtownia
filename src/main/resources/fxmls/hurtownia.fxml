@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.HurtowniaController">
+   <children>
+      <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+          <Tab fx:id="tabZyskiZKursow" text="Zyski z kursów">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" layoutX="14.0" layoutY="685.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox alignment="CENTER" spacing="10.0">
+                                 <children>
+                                    <Label text="Kierowca:" />
+                                    <ChoiceBox fx:id="zyskiZKursowChoiceBoxKierowcy" maxWidth="1.7976931348623157E308" onAction="#kierowcyChoiceBoxActionHandle" HBox.hgrow="ALWAYS">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </ChoiceBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="300.0" right="300.0" top="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <TableView fx:id="zyskiZKursowTableView" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="zyskiZKursowColumnRok" prefWidth="333.0" text="Rok" />
+                                  <TableColumn fx:id="zyskiZKursowColumnMiesiac" prefWidth="333.0" text="Miesiąc" />
+                                  <TableColumn fx:id="zyskiZKursowColumnZysk" minWidth="0.0" prefWidth="333.0" text="Zysk" />
+                                </columns>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="tabZestawienieKierowcow" text="Zestawienie kierowców">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="CENTER" layoutX="33.0" layoutY="595.0" prefHeight="50.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                               <HBox alignment="CENTER" spacing="10.0">
+                                   <children>
+                                       <Label text="Rok:" />
+                                       <ChoiceBox fx:id="zestawienieKierowcowChoiceBoxRok" maxWidth="1.7976931348623157E308" onAction="#rokChoiceBoxActionHandle" HBox.hgrow="ALWAYS">
+                                           <opaqueInsets>
+                                               <Insets />
+                                           </opaqueInsets>
+                                           <HBox.margin>
+                                               <Insets />
+                                           </HBox.margin>
+                                       </ChoiceBox>
+                                       <Label text="Miesiąc:" />
+                                       <ChoiceBox fx:id="zestawienieKierowcowChoiceBoxMiesiac" maxWidth="1.7976931348623157E308" onAction="#miesiacChoiceBoxActionHandle" HBox.hgrow="ALWAYS">
+                                           <opaqueInsets>
+                                               <Insets />
+                                           </opaqueInsets>
+                                           <HBox.margin>
+                                               <Insets />
+                                           </HBox.margin>
+                                       </ChoiceBox>
+                                   </children>
+                                   <VBox.margin>
+                                       <Insets bottom="10.0" left="300.0" right="300.0" top="10.0" />
+                                   </VBox.margin>
+                               </HBox>
+                               <TableView fx:id="zestawienieKierowcowTableView" VBox.vgrow="ALWAYS">
+                                   <columns>
+                                    <TableColumn fx:id="zestawienieKierowcowColumnNazwisko" prefWidth="333.0" text="Nazwisko" />
+                                       <TableColumn fx:id="zestawienieKierowcowColumnImie" prefWidth="333.0" text="Imie" />
+                                       <TableColumn fx:id="zestawienieKierowcowColumnZysk" prefWidth="333.0" text="Zysk" />
+                                   </columns>
+                                   <VBox.margin>
+                                       <Insets />
+                                   </VBox.margin>
+                               </TableView>
+                           </children>
+                        </VBox>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+            <Tab fx:id="tabZestawienieMiast" text="Zestawienie miast">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" layoutX="188.0" layoutY="685.0" prefHeight="50.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <HBox alignment="CENTER" spacing="10.0">
+                                    <children>
+                                        <Label text="Rok:" />
+                                        <ChoiceBox fx:id="zestawienieMiastChoiceBoxRok" maxWidth="1.7976931348623157E308" onAction="#rokChoiceBoxActionHandle" HBox.hgrow="ALWAYS">
+                                            <opaqueInsets>
+                                                <Insets />
+                                            </opaqueInsets>
+                                            <HBox.margin>
+                                                <Insets />
+                                            </HBox.margin>
+                                        </ChoiceBox>
+                                        <Label text="Miesiąc:" />
+                                        <ChoiceBox fx:id="zestawienieMiastChoiceBoxMiesiac" maxWidth="1.7976931348623157E308" onAction="#miesiacChoiceBoxActionHandle" HBox.hgrow="ALWAYS">
+                                            <opaqueInsets>
+                                                <Insets />
+                                            </opaqueInsets>
+                                            <HBox.margin>
+                                                <Insets />
+                                            </HBox.margin>
+                                        </ChoiceBox>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="300.0" right="300.0" top="10.0" />
+                                    </VBox.margin>
+                                </HBox>
+                                <TableView fx:id="zestawienieMiastTableView" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="zestawienieMiastColumnMiasto" prefWidth="510.0" text="Miasto" />
+                                        <TableColumn fx:id="zestawienieMiastColumnIloscKlientow" prefWidth="510.0" text="Ilość klientów" />
+                                    </columns>
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                </TableView>
+                            </children></VBox>
+                     </children></AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="tabPotencjalniOszusci" text="Potencjalni oszuści">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="CENTER" layoutY="470.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <TableView fx:id="potencjalniOszusciTableView" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="potencjalniOszusciColumnNazwisko" prefWidth="150.0" text="Nazwisko" />
+                                        <TableColumn fx:id="potencjalniOszusciColumnImie" prefWidth="250.0" text="Imię" />
+                                    </columns>
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                </TableView>
+                           </children>
+                        </VBox>
+                     </children></AnchorPane>
+               </content>
+            </Tab>
+      </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

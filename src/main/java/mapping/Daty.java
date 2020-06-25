@@ -7,9 +7,9 @@ import java.util.Objects;
 @Entity
 public class Daty {
     private int dataId;
-    private int dzien;
-    private int miesiac;
-    private int rok;
+    private Integer dzien;
+    private Integer miesiac;
+    private Integer rok;
     private Collection<Kursy> kursiesByDataId;
 
     @Id
@@ -23,32 +23,32 @@ public class Daty {
     }
 
     @Basic
-    @Column(name = "dzien", nullable = false)
-    public int getDzien() {
+    @Column(name = "dzien", nullable = true)
+    public Integer getDzien() {
         return dzien;
     }
 
-    public void setDzien(int dzien) {
+    public void setDzien(Integer dzien) {
         this.dzien = dzien;
     }
 
     @Basic
-    @Column(name = "miesiac", nullable = false)
-    public int getMiesiac() {
+    @Column(name = "miesiac", nullable = true)
+    public Integer getMiesiac() {
         return miesiac;
     }
 
-    public void setMiesiac(int miesiac) {
+    public void setMiesiac(Integer miesiac) {
         this.miesiac = miesiac;
     }
 
     @Basic
-    @Column(name = "rok", nullable = false)
-    public int getRok() {
+    @Column(name = "rok", nullable = true)
+    public Integer getRok() {
         return rok;
     }
 
-    public void setRok(int rok) {
+    public void setRok(Integer rok) {
         this.rok = rok;
     }
 
@@ -58,9 +58,9 @@ public class Daty {
         if (o == null || getClass() != o.getClass()) return false;
         Daty daty = (Daty) o;
         return dataId == daty.dataId &&
-                dzien == daty.dzien &&
-                miesiac == daty.miesiac &&
-                rok == daty.rok;
+                Objects.equals(dzien, daty.dzien) &&
+                Objects.equals(miesiac, daty.miesiac) &&
+                Objects.equals(rok, daty.rok);
     }
 
     @Override

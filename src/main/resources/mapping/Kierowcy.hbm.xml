@@ -9,32 +9,14 @@
             <column name="kierowca_id" sql-type="integer"/>
         </id>
         <property name="imie">
-            <column name="imie" sql-type="varchar"/>
+            <column name="imie" sql-type="varchar" not-null="true"/>
         </property>
         <property name="nazwisko">
-            <column name="nazwisko" sql-type="varchar"/>
+            <column name="nazwisko" sql-type="varchar" not-null="true"/>
         </property>
-        <property name="pesel">
-            <column name="pesel" sql-type="varchar(11)" length="11"/>
-        </property>
-        <property name="nrLicencji">
-            <column name="nr_licencji" sql-type="integer"/>
-        </property>
-        <property name="dataWaznosciLicencji">
-            <column name="data_waznosci_licencji" sql-type="date"/>
-        </property>
-        <property name="nrTelefonu">
-            <column name="nr_telefonu" sql-type="varchar(9)" length="9"/>
-        </property>
-        <property name="ocena">
-            <column name="ocena" sql-type="integer"/>
-        </property>
-        <many-to-one name="samochodyBySamochodId" class="mapping.Samochody">
-            <column name="samochod_id"/>
-        </many-to-one>
         <set name="kursiesByKierowcaId" inverse="true">
             <key>
-                <column name="kierowca_id"/>
+                <column name="kierowca_id" not-null="true"/>
             </key>
             <one-to-many not-found="ignore" class="mapping.Kursy"/>
         </set>

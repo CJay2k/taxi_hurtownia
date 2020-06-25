@@ -10,7 +10,6 @@ public class Klienci {
     private String imie;
     private String nazwisko;
     private String miasto;
-    private String nrTelefonu;
     private Collection<Kursy> kursiesByKlientId;
 
     @Id
@@ -24,7 +23,7 @@ public class Klienci {
     }
 
     @Basic
-    @Column(name = "imie", nullable = false, length = 255)
+    @Column(name = "imie", nullable = true, length = 255)
     public String getImie() {
         return imie;
     }
@@ -34,7 +33,7 @@ public class Klienci {
     }
 
     @Basic
-    @Column(name = "nazwisko", nullable = false, length = 255)
+    @Column(name = "nazwisko", nullable = true, length = 255)
     public String getNazwisko() {
         return nazwisko;
     }
@@ -44,23 +43,13 @@ public class Klienci {
     }
 
     @Basic
-    @Column(name = "miasto", nullable = false, length = 255)
+    @Column(name = "miasto", nullable = true, length = 255)
     public String getMiasto() {
         return miasto;
     }
 
     public void setMiasto(String miasto) {
         this.miasto = miasto;
-    }
-
-    @Basic
-    @Column(name = "nr_telefonu", nullable = true, length = 9)
-    public String getNrTelefonu() {
-        return nrTelefonu;
-    }
-
-    public void setNrTelefonu(String nrTelefonu) {
-        this.nrTelefonu = nrTelefonu;
     }
 
     @Override
@@ -71,13 +60,12 @@ public class Klienci {
         return klientId == klienci.klientId &&
                 Objects.equals(imie, klienci.imie) &&
                 Objects.equals(nazwisko, klienci.nazwisko) &&
-                Objects.equals(miasto, klienci.miasto) &&
-                Objects.equals(nrTelefonu, klienci.nrTelefonu);
+                Objects.equals(miasto, klienci.miasto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(klientId, imie, nazwisko, miasto, nrTelefonu);
+        return Objects.hash(klientId, imie, nazwisko, miasto);
     }
 
     @OneToMany(mappedBy = "klienciByKlientId")

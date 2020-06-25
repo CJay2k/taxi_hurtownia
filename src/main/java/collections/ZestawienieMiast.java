@@ -1,6 +1,4 @@
-package mapping;
-
-import java.math.BigDecimal;
+package collections;
 
 public class ZestawienieMiast {
     private String nazwaMiasta;

@@ -9,17 +9,17 @@
             <column name="data_id" sql-type="integer"/>
         </id>
         <property name="dzien">
-            <column name="dzien" sql-type="integer"/>
+            <column name="dzien" sql-type="integer" not-null="true"/>
         </property>
         <property name="miesiac">
-            <column name="miesiac" sql-type="integer"/>
+            <column name="miesiac" sql-type="integer" not-null="true"/>
         </property>
         <property name="rok">
-            <column name="rok" sql-type="integer"/>
+            <column name="rok" sql-type="integer" not-null="true"/>
         </property>
         <set name="kursiesByDataId" inverse="true">
             <key>
-                <column name="data_id"/>
+                <column name="data_id" not-null="true"/>
             </key>
             <one-to-many not-found="ignore" class="mapping.Kursy"/>
         </set>

@@ -62,8 +62,8 @@
                                                <Insets />
                                            </HBox.margin>
                                        </ChoiceBox>
-                                       <Label text="Miesiąc:" />
-                                       <ChoiceBox fx:id="zestawienieKierowcowChoiceBoxMiesiac" maxWidth="1.7976931348623157E308" onAction="#miesiacChoiceBoxActionHandle" HBox.hgrow="ALWAYS">
+                                       <Label text="Miesiące od:" />
+                                       <ChoiceBox fx:id="zestawienieKierowcowChoiceBoxMiesiacOd" maxWidth="1.7976931348623157E308" onAction="#miesiacChoiceBoxActionHandle" HBox.hgrow="ALWAYS">
                                            <opaqueInsets>
                                                <Insets />
                                            </opaqueInsets>
@@ -71,6 +71,8 @@
                                                <Insets />
                                            </HBox.margin>
                                        </ChoiceBox>
+                                    <Label text="do:" />
+                                    <ChoiceBox fx:id="zestawienieKierowcowChoiceBoxMiesiacDo" maxWidth="1.7976931348623157E308" onAction="#miesiacChoiceBoxActionHandle" HBox.hgrow="ALWAYS" />
                                    </children>
                                    <VBox.margin>
                                        <Insets bottom="10.0" left="300.0" right="300.0" top="10.0" />
@@ -108,8 +110,8 @@
                                                 <Insets />
                                             </HBox.margin>
                                         </ChoiceBox>
-                                        <Label text="Miesiąc:" />
-                                        <ChoiceBox fx:id="zestawienieMiastChoiceBoxMiesiac" maxWidth="1.7976931348623157E308" onAction="#miesiacChoiceBoxActionHandle" HBox.hgrow="ALWAYS">
+                                        <Label text="Miesiące od:" />
+                                        <ChoiceBox fx:id="zestawienieMiastChoiceBoxMiesiacOd" maxWidth="1.7976931348623157E308" onAction="#miesiacChoiceBoxActionHandle" HBox.hgrow="ALWAYS">
                                             <opaqueInsets>
                                                 <Insets />
                                             </opaqueInsets>
@@ -117,6 +119,8 @@
                                                 <Insets />
                                             </HBox.margin>
                                         </ChoiceBox>
+                                    <Label text="do:" />
+                                    <ChoiceBox fx:id="zestawienieMiastChoiceBoxMiesiacDo" maxWidth="1.7976931348623157E308" onAction="#miesiacChoiceBoxActionHandle" HBox.hgrow="ALWAYS" />
                                     </children>
                                     <VBox.margin>
                                         <Insets bottom="10.0" left="300.0" right="300.0" top="10.0" />
@@ -141,6 +145,15 @@
                      <children>
                         <VBox alignment="CENTER" layoutY="470.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
+                              <HBox alignment="CENTER" spacing="10.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#loadDataPotencjalniOszusci" text="Pokaż oszustów" />
+                                    <Button mnemonicParsing="false" onAction="#loadAllKierowcyToPotencjalniOszusci" text="Wyczyść" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="300.0" right="300.0" top="10.0" />
+                                 </VBox.margin>
+                              </HBox>
                                 <TableView fx:id="potencjalniOszusciTableView" VBox.vgrow="ALWAYS">
                                     <columns>
                                         <TableColumn fx:id="potencjalniOszusciColumnNazwisko" prefWidth="150.0" text="Nazwisko" />
@@ -150,6 +163,7 @@
                                         <Insets />
                                     </VBox.margin>
                                 </TableView>
+                              <TextArea fx:id="textAreaPotencjalniOszusci" editable="false" prefHeight="200.0" prefWidth="200.0" />
                            </children>
                         </VBox>
                      </children></AnchorPane>

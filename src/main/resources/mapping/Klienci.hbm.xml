@@ -9,20 +9,17 @@
             <column name="klient_id" sql-type="integer"/>
         </id>
         <property name="imie">
-            <column name="imie" sql-type="varchar(255)"/>
+            <column name="imie" sql-type="varchar(255)" not-null="true"/>
         </property>
         <property name="nazwisko">
-            <column name="nazwisko" sql-type="varchar(255)"/>
+            <column name="nazwisko" sql-type="varchar(255)" not-null="true"/>
         </property>
         <property name="miasto">
-            <column name="miasto" sql-type="varchar(255)"/>
-        </property>
-        <property name="nrTelefonu">
-            <column name="nr_telefonu" sql-type="varchar(9)" length="9" not-null="true"/>
+            <column name="miasto" sql-type="varchar(255)" not-null="true"/>
         </property>
         <set name="kursiesByKlientId" inverse="true">
             <key>
-                <column name="klient_id"/>
+                <column name="klient_id" not-null="true"/>
             </key>
             <one-to-many not-found="ignore" class="mapping.Kursy"/>
         </set>

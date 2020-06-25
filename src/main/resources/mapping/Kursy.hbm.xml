@@ -9,19 +9,19 @@
             <column name="kurs_id" sql-type="integer"/>
         </id>
         <property name="odleglosc">
-            <column name="odleglosc" sql-type="integer"/>
+            <column name="odleglosc" sql-type="integer" not-null="true"/>
         </property>
         <property name="cena">
-            <column name="cena" sql-type="numeric" precision="-1"/>
+            <column name="cena" sql-type="numeric" precision="-1" not-null="true"/>
         </property>
         <many-to-one name="klienciByKlientId" class="mapping.Klienci">
-            <column name="klient_id"/>
+            <column name="klient_id" not-null="true"/>
         </many-to-one>
         <many-to-one name="kierowcyByKierowcaId" class="mapping.Kierowcy">
-            <column name="kierowca_id"/>
+            <column name="kierowca_id" not-null="true"/>
         </many-to-one>
         <many-to-one name="datyByDataId" class="mapping.Daty">
-            <column name="data_id"/>
+            <column name="data_id" not-null="true"/>
         </many-to-one>
     </class>
 </hibernate-mapping>

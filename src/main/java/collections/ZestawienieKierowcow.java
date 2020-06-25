@@ -1,4 +1,4 @@
-package mapping;
+package collections;
 
 import java.math.BigDecimal;
 

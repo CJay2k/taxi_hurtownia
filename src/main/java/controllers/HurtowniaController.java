@@ -1,5 +1,8 @@
 package controllers;
 
+import collections.ZestawienieKierowcow;
+import collections.ZestawienieMiast;
+import collections.ZyskiZKursow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,22 +11,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import mapping.*;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.hibernate.query.internal.QueryImpl;
 import weka.classifiers.trees.J48;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.Utils;
-import weka.core.converters.ArffSaver;
-import weka.core.converters.CSVLoader;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class HurtowniaController {
 
@@ -46,7 +40,8 @@ public class HurtowniaController {
 
     public Tab tabZestawienieKierowcow;
     public ChoiceBox<Integer> zestawienieKierowcowChoiceBoxRok;
-    public ChoiceBox<Integer> zestawienieKierowcowChoiceBoxMiesiac;
+    public ChoiceBox<Integer> zestawienieKierowcowChoiceBoxMiesiacOd;
+    public ChoiceBox<Integer> zestawienieKierowcowChoiceBoxMiesiacDo;
     public TableView<ZestawienieKierowcow> zestawienieKierowcowTableView;
     public TableColumn<ZestawienieKierowcow, String> zestawienieKierowcowColumnNazwisko;
     public TableColumn<ZestawienieKierowcow, String> zestawienieKierowcowColumnImie;
@@ -58,7 +53,8 @@ public class HurtowniaController {
 
     public Tab tabZestawienieMiast;
     public ChoiceBox<Integer> zestawienieMiastChoiceBoxRok;
-    public ChoiceBox<Integer> zestawienieMiastChoiceBoxMiesiac;
+    public ChoiceBox<Integer> zestawienieMiastChoiceBoxMiesiacOd;
+    public ChoiceBox<Integer> zestawienieMiastChoiceBoxMiesiacDo;
     public TableView<ZestawienieMiast> zestawienieMiastTableView;
     public TableColumn<ZestawienieMiast, String> zestawienieMiastColumnMiasto;
     public TableColumn<ZestawienieMiast, Long> zestawienieMiastColumnIloscKlientow;
@@ -71,6 +67,7 @@ public class HurtowniaController {
     public TableView<Kierowcy> potencjalniOszusciTableView;
     public TableColumn<Kierowcy, String> potencjalniOszusciColumnNazwisko;
     public TableColumn<Kierowcy, String> potencjalniOszusciColumnImie;
+    public TextArea textAreaPotencjalniOszusci;
 
     //================================================================================
     // Private
@@ -96,12 +93,8 @@ public class HurtowniaController {
         loadDataZyskiZKursow(true);
         loadDataZestawienieKierowcow(true, true);
         loadDataZestawienieMiast(true, true);
-        loadDataPotencjalniOszusci();
+        loadAllKierowcyToPotencjalniOszusci();
 
-//        importCSVtoARFF("./src/main/java/data/kursy.csv", "./src/main/java/data/kursy.arff");
-
-        BasicTools.processData();
-        klasyfikacjaNowychPrzypadkow();
     }
 
     private void loadDataZyskiZKursow(boolean reloadChoiceBoxKierowcy) {
@@ -109,7 +102,9 @@ public class HurtowniaController {
 
             if (reloadChoiceBoxKierowcy) fillComboBoxKierowcy(zyskiZKursowChoiceBoxKierowcy);
 
-            Query<ZyskiZKursow> query = session.createQuery("SELECT new mapping.ZyskiZKursow(k.datyByDataId.rok, k.datyByDataId.miesiac, sum(k.cena)) FROM Kursy k WHERE k.kierowcyByKierowcaId.id=" + zyskiZKursowChoiceBoxKierowcy.getValue().getKierowcaId() + " GROUP BY k.datyByDataId.rok, k.datyByDataId.miesiac ORDER BY k.datyByDataId.rok DESC , k.datyByDataId.miesiac DESC", ZyskiZKursow.class);
+            if (zyskiZKursowChoiceBoxKierowcy.getSelectionModel().isEmpty()) return;
+
+            Query<ZyskiZKursow> query = session.createQuery("SELECT new collections.ZyskiZKursow(k.datyByDataId.rok, k.datyByDataId.miesiac, sum(k.cena)) FROM Kursy k WHERE k.kierowcyByKierowcaId.id=" + zyskiZKursowChoiceBoxKierowcy.getValue().getKierowcaId() + " GROUP BY ROLLUP(k.datyByDataId.miesiac), k.datyByDataId.rok ORDER BY k.datyByDataId.rok DESC, k.datyByDataId.miesiac", ZyskiZKursow.class);
 
             zyskiZKursowTableView.setItems(FXCollections.observableArrayList(query.list()));
         }
@@ -119,9 +114,17 @@ public class HurtowniaController {
         try (Session session = SessionController.getSession()) {
 
             if (reloadChoiceBoxRok) fillComboBoxRok(zestawienieKierowcowChoiceBoxRok);
-            if (reloadChoiceBoxMiesiac) fillComboBoxMiesiac(zestawienieKierowcowChoiceBoxRok, zestawienieKierowcowChoiceBoxMiesiac);
 
-            Query<ZestawienieKierowcow> query = session.createQuery("SELECT new mapping.ZestawienieKierowcow(k.kierowcyByKierowcaId.nazwisko, k.kierowcyByKierowcaId.imie, sum(k.cena) AS SumaZyskow) FROM Kursy k WHERE k.datyByDataId.rok=" + zestawienieKierowcowChoiceBoxRok.getValue() + " AND k.datyByDataId.miesiac=" + zestawienieKierowcowChoiceBoxMiesiac.getValue() + " GROUP BY k.kierowcyByKierowcaId.nazwisko, k.kierowcyByKierowcaId.imie ORDER BY SumaZyskow DESC", ZestawienieKierowcow.class);
+            if (zestawienieKierowcowChoiceBoxRok.getSelectionModel().isEmpty()) return;
+
+            if (reloadChoiceBoxMiesiac) fillComboBoxMiesiac(zestawienieKierowcowChoiceBoxRok, zestawienieKierowcowChoiceBoxMiesiacOd, zestawienieKierowcowChoiceBoxMiesiacDo);
+
+            if (zestawienieKierowcowChoiceBoxMiesiacOd.getSelectionModel().isEmpty() || zestawienieKierowcowChoiceBoxMiesiacDo.getSelectionModel().isEmpty()){
+                zestawienieKierowcowTableView.setItems(null);
+                return;
+            }
+
+            Query<ZestawienieKierowcow> query = session.createQuery("SELECT new collections.ZestawienieKierowcow(k.kierowcyByKierowcaId.nazwisko, k.kierowcyByKierowcaId.imie, sum(k.cena) AS SumaZyskow) FROM Kursy k WHERE k.datyByDataId.rok=" + zestawienieKierowcowChoiceBoxRok.getValue() + " AND k.datyByDataId.miesiac BETWEEN " + zestawienieKierowcowChoiceBoxMiesiacOd.getValue() + " AND " + zestawienieKierowcowChoiceBoxMiesiacDo.getValue() + " GROUP BY ROLLUP ((k.kierowcyByKierowcaId.nazwisko, k.kierowcyByKierowcaId.imie)) ORDER BY k.kierowcyByKierowcaId.nazwisko, k.kierowcyByKierowcaId.imie", ZestawienieKierowcow.class);
 
             zestawienieKierowcowTableView.setItems(FXCollections.observableArrayList(query.list()));
         }
@@ -131,34 +134,68 @@ public class HurtowniaController {
         try (Session session = SessionController.getSession()) {
 
             if (reloadChoiceBoxRok) fillComboBoxRok(zestawienieMiastChoiceBoxRok);
-            if (reloadChoiceBoxMiesiac) fillComboBoxMiesiac(zestawienieMiastChoiceBoxRok, zestawienieMiastChoiceBoxMiesiac);
 
-            Query<ZestawienieMiast> query = session.createQuery("SELECT new mapping.ZestawienieMiast(k.klienciByKlientId.miasto, count(k) AS SumaKlientow) FROM Kursy k WHERE k.datyByDataId.rok=" + zestawienieMiastChoiceBoxRok.getValue() + " AND k.datyByDataId.miesiac=" + zestawienieMiastChoiceBoxMiesiac.getValue() + " GROUP BY k.klienciByKlientId.miasto ORDER BY SumaKlientow DESC", ZestawienieMiast.class);
+            if (zestawienieMiastChoiceBoxRok.getSelectionModel().isEmpty()) return;
+
+            if (reloadChoiceBoxMiesiac) fillComboBoxMiesiac(zestawienieMiastChoiceBoxRok, zestawienieMiastChoiceBoxMiesiacOd, zestawienieMiastChoiceBoxMiesiacDo);
+
+            if (zestawienieMiastChoiceBoxMiesiacOd.getSelectionModel().isEmpty() || zestawienieMiastChoiceBoxMiesiacDo.getSelectionModel().isEmpty()){
+                zestawienieMiastTableView.setItems(null);
+                return;
+            }
+
+            Query<ZestawienieMiast> query = session.createQuery("SELECT new collections.ZestawienieMiast(k.klienciByKlientId.miasto, count(k) AS SumaKlientow) FROM Kursy k WHERE k.datyByDataId.rok=" + zestawienieMiastChoiceBoxRok.getValue() + " AND k.datyByDataId.miesiac BETWEEN " + zestawienieMiastChoiceBoxMiesiacOd.getValue() + " AND " + zestawienieMiastChoiceBoxMiesiacDo.getValue() + " GROUP BY k.klienciByKlientId.miasto ORDER BY SumaKlientow DESC", ZestawienieMiast.class);
 
             zestawienieMiastTableView.setItems(FXCollections.observableArrayList(query.list()));
         }
     }
 
-    private void loadDataPotencjalniOszusci() throws IOException {
+    @FXML
+    private void loadAllKierowcyToPotencjalniOszusci() {
+        try (Session session = SessionController.getSession()) {
+            Query<Kierowcy> query = session.createQuery("FROM Kierowcy k ORDER BY k.nazwisko", Kierowcy.class);
+            potencjalniOszusciTableView.setItems(FXCollections.observableArrayList(query.list()));
+        }
+
+        textAreaPotencjalniOszusci.setText("");
+    }
+
+    @FXML
+    private void loadDataPotencjalniOszusci() throws Exception {
+        BasicTools.processData();
+        klasyfikacjaNowychPrzypadkow();
+
         try (Session session = SessionController.getSession()) {
 
             Instances instances = BasicTools.loadData("./src/main/java/data/kursy_bez_decyzji_wypelnione.arff");
 
-            String s = "";
-            StringBuilder sB = new StringBuilder(s);
+            String queryString = "";
+            StringBuilder stringBuilderQueryString = new StringBuilder(queryString);
 
-            sB.append("SELECT DISTINCT k FROM Kierowcy k JOIN FETCH k.kursiesByKierowcaId ku WHERE 1=0 OR ");
+            String explainString = "";
+            StringBuilder stringBuilderexplainString = new StringBuilder(explainString);
+
+            stringBuilderQueryString.append("SELECT DISTINCT k FROM Kierowcy k JOIN FETCH k.kursiesByKierowcaId ku WHERE 1=0 OR ");
             for (Instance instance : instances) {
                 if(instance.toString().contains("t")){
-                    sB.append("(ku.odleglosc=").append(instance.value(0)).append(" AND ku.cena=").append(instance.value(1)).append(") OR ");
+                    stringBuilderQueryString.append("(ku.odleglosc=").append(instance.value(0)).append(" AND ku.cena=").append(instance.value(1)).append(") OR ");
+                    stringBuilderexplainString.append("Za kurs o długości: ").append(instance.value(0)).append("km została naliczona opłata w wysokości: ").append(instance.value(1)).append("zł \n");
                 }
             }
-            sB.delete(sB.length()-3, sB.length()-1);
+            stringBuilderQueryString.delete(stringBuilderQueryString.length()-3, stringBuilderQueryString.length()-1);
 
-            s = sB.toString();
+            queryString = stringBuilderQueryString.toString();
+            explainString = stringBuilderexplainString.toString();
 
-            Query<Kierowcy> query = session.createQuery(s, Kierowcy.class);
+            Query<Kierowcy> query = session.createQuery(queryString, Kierowcy.class);
             potencjalniOszusciTableView.setItems(FXCollections.observableArrayList(query.list()));
+
+            if(explainString.isEmpty()){
+                textAreaPotencjalniOszusci.setText("Nie znaleziono żadnych potencjalnych oszustów :)");
+            }else {
+                textAreaPotencjalniOszusci.setText(explainString + "\nWyżej wyświetleni kierowcy są odpowiedzialni za niepoprawne naliczanie opłat za kurs!");
+            }
+
         }
     }
 
@@ -168,7 +205,6 @@ public class HurtowniaController {
             ObservableList<Kierowcy> listaKierowcow = FXCollections.observableArrayList(query1.list());
 
             choiceBoxKierowcy.setItems(listaKierowcow);
-            choiceBoxKierowcy.getSelectionModel().select(0);
         }
     }
 
@@ -178,20 +214,19 @@ public class HurtowniaController {
             ObservableList<Integer> listaLat = FXCollections.observableArrayList(query1.list());
 
             choiceBoxRok.setItems(listaLat);
-            choiceBoxRok.getSelectionModel().select(0);
         }
     }
 
-    private void fillComboBoxMiesiac(ChoiceBox<Integer> choiceBoxRok, ChoiceBox<Integer> choiceBoxMiesiac) {
+    private void fillComboBoxMiesiac(ChoiceBox<Integer> choiceBoxRok, ChoiceBox<Integer> choiceBoxMiesiacOd, ChoiceBox<Integer> choiceBoxMiesiacDo) {
         try (Session session = SessionController.getSession()) {
-            Query<Integer> query1 = session.createQuery("SELECT DISTINCT d.miesiac FROM Daty d WHERE d.rok=" + choiceBoxRok.getValue() + "ORDER BY d.miesiac", Integer.class);
+            Query<Integer> query1 = session.createQuery("SELECT DISTINCT d.miesiac FROM Daty d WHERE d.rok=" + choiceBoxRok.getValue() + " ORDER BY d.miesiac", Integer.class);
             ObservableList<Integer> listaMiesiecy = FXCollections.observableArrayList(query1.list());
 
-            choiceBoxMiesiac.setItems(listaMiesiecy);
-            choiceBoxMiesiac.getSelectionModel().select(0);
+            choiceBoxMiesiacOd.setItems(listaMiesiecy);
+            choiceBoxMiesiacDo.setItems(listaMiesiecy);
+
         }
     }
-
     @FXML
     private void kierowcyChoiceBoxActionHandle() {
         loadDataZyskiZKursow(false);
@@ -207,21 +242,6 @@ public class HurtowniaController {
     private void miesiacChoiceBoxActionHandle() {
         if (currentTab.equals(tabZestawienieKierowcow)) loadDataZestawienieKierowcow(false, false);
         else if (currentTab.equals(tabZestawienieMiast)) loadDataZestawienieMiast(false, false);
-    }
-
-
-    public static void importCSVtoARFF(String fileNameCSV,String fileNameARFF) throws IOException {
-        CSVLoader loader = new CSVLoader();
-        loader.setSource(new File(fileNameCSV));
-        Instances data = loader.getDataSet();
-        saveData(data,fileNameARFF);
-    }
-
-    public static void saveData(Instances data,String fileName) throws IOException {
-        ArffSaver saver = new ArffSaver();
-        saver.setFile(new File(fileName));
-        saver.setInstances(data);
-        saver.writeBatch();
     }
 
     public static void klasyfikacjaNowychPrzypadkow() throws Exception{

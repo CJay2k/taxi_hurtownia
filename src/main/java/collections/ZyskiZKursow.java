@@ -1,34 +1,39 @@
-package mapping;
+package collections;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 public class ZyskiZKursow {
-    private int rok;
-    private int miesiac;
+    private Integer rok;
+    private Integer miesiac;
     private BigDecimal zysk;
 
     public ZyskiZKursow() {}
 
-    public ZyskiZKursow(int rok, int miesiac, BigDecimal zysk) {
+    public ZyskiZKursow(BigDecimal zysk) {
+        this.rok=0;
+        this.miesiac=0;
+        this.zysk=zysk;
+    }
+
+    public ZyskiZKursow(Integer rok, Integer miesiac, BigDecimal zysk) {
         this.rok=rok;
         this.miesiac=miesiac;
         this.zysk=zysk;
     }
 
-    public int getRok() {
+    public Integer getRok() {
         return rok;
     }
 
-    public void setRok(int rok) {
+    public void setRok(Integer rok) {
         this.rok = rok;
     }
 
-    public int getMiesiac() {
+    public Integer getMiesiac() {
         return miesiac;
     }
 
-    public void setMiesiac(int miesiac) {
+    public void setMiesiac(Integer miesiac) {
         this.miesiac = miesiac;
     }
 

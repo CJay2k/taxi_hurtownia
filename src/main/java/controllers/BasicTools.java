@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Properties;
 
-
 public class BasicTools {
 
     public static Instances loadData(String fileName) throws IOException {

@@ -19,8 +19,6 @@
         <mapping resource="mapping/Klienci.hbm.xml"/>
         <mapping class="mapping.Kursy"/>
         <mapping resource="mapping/Kursy.hbm.xml"/>
-        <mapping class="mapping.Samochody"/>
-        <mapping resource="mapping/Samochody.hbm.xml"/>
         <mapping class="mapping.Daty"/>
         <mapping resource="mapping/Daty.hbm.xml"/>
     </session-factory>
